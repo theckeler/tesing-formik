@@ -10,18 +10,18 @@ import {
 	TextField,
 	Typography,
 } from "@mui/material";
-import { ErrorMessage, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import React from "react";
 
+// Form values type
 interface FormValues {
 	name: string;
 	email: string;
 	password: string;
-	terms: boolean;
+	terms: boolean | string;
 }
 
 const MyForm: React.FC = () => {
-	// Initial form values
 	const initialValues: FormValues = {
 		name: "",
 		email: "",
@@ -29,19 +29,9 @@ const MyForm: React.FC = () => {
 		terms: false,
 	};
 
-	// Form submission handler
-	const handleSubmit = (
-		values: FormValues,
-		{ setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
-	) => {
-		console.log("Form submitted with values:", values);
-		setSubmitting(false);
-	};
-
-	// Simple validation function
+	// Form validation
 	const validate = (values: FormValues) => {
 		const errors: Partial<FormValues> = {};
-
 		if (!values.name) {
 			errors.name = "Name is required";
 		}
@@ -58,8 +48,16 @@ const MyForm: React.FC = () => {
 		if (!values.terms) {
 			errors.terms = "You must accept the terms and conditions";
 		}
-
 		return errors;
+	};
+
+	// Form submission
+	const handleSubmit = (
+		values: FormValues,
+		{ setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+	) => {
+		console.log("Form submitted:", values);
+		setSubmitting(false);
 	};
 
 	return (
@@ -73,7 +71,7 @@ const MyForm: React.FC = () => {
 				validate={validate}
 				onSubmit={handleSubmit}
 			>
-				{({ isSubmitting, handleChange, values, handleBlur }) => (
+				{({ isSubmitting, handleChange, values, errors, touched }) => (
 					<Form>
 						{/* Name Field */}
 						<FormGroup sx={{ marginBottom: 2 }}>
@@ -84,13 +82,9 @@ const MyForm: React.FC = () => {
 								variant="outlined"
 								fullWidth
 								onChange={handleChange}
-								onBlur={handleBlur}
 								value={values.name}
-							/>
-							<ErrorMessage
-								name="name"
-								component="div"
-								style={{ color: "red", marginTop: "5px" }}
+								error={Boolean(touched.name && errors.name)}
+								helperText={touched.name && errors.name ? errors.name : ""}
 							/>
 						</FormGroup>
 
@@ -103,13 +97,9 @@ const MyForm: React.FC = () => {
 								variant="outlined"
 								fullWidth
 								onChange={handleChange}
-								onBlur={handleBlur}
 								value={values.email}
-							/>
-							<ErrorMessage
-								name="email"
-								component="div"
-								style={{ color: "red", marginTop: "5px" }}
+								error={Boolean(touched.email && errors.email)}
+								helperText={touched.email && errors.email ? errors.email : ""}
 							/>
 						</FormGroup>
 
@@ -123,13 +113,11 @@ const MyForm: React.FC = () => {
 								variant="outlined"
 								fullWidth
 								onChange={handleChange}
-								onBlur={handleBlur}
 								value={values.password}
-							/>
-							<ErrorMessage
-								name="password"
-								component="div"
-								style={{ color: "red", marginTop: "5px" }}
+								error={Boolean(touched.password && errors.password)}
+								helperText={
+									touched.password && errors.password ? errors.password : ""
+								}
 							/>
 						</FormGroup>
 
@@ -140,17 +128,17 @@ const MyForm: React.FC = () => {
 									<Checkbox
 										id="terms"
 										name="terms"
-										checked={values.terms}
+										checked={values.terms ? true : false}
 										onChange={handleChange}
 									/>
 								}
 								label="I accept the terms and conditions"
 							/>
-							<ErrorMessage
-								name="terms"
-								component="div"
-								style={{ color: "red", marginTop: "5px" }}
-							/>
+							{touched.terms && errors.terms && (
+								<Typography variant="body2" color="error">
+									{errors.terms}
+								</Typography>
+							)}
 						</FormGroup>
 
 						{/* Submit Button */}
