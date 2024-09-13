@@ -155,6 +155,7 @@ const MyForm: React.FC = () => {
 							color="primary"
 							fullWidth
 							disabled={isSubmitting}
+							sx={{ fontSize: "1.2rem" }}
 						>
 							{isSubmitting ? "Submitting..." : "Submit"}
 						</Button>
