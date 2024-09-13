@@ -21,6 +21,13 @@ interface FormValues {
 	terms: boolean | string;
 }
 
+interface FormErrors {
+	name?: string;
+	email?: string;
+	password?: string;
+	terms?: string;
+}
+
 const MyForm: React.FC = () => {
 	const initialValues: FormValues = {
 		name: "",
@@ -31,7 +38,7 @@ const MyForm: React.FC = () => {
 
 	// Form validation
 	const validate = (values: FormValues) => {
-		const errors: Partial<FormValues> = {};
+		const errors: FormErrors = {};
 		if (!values.name) {
 			errors.name = "Name is required";
 		}
