@@ -61,8 +61,8 @@ const MyForm: React.FC = () => {
 	};
 
 	return (
-		<Box sx={{ maxWidth: 400, margin: "auto", padding: 2 }}>
-			<Typography variant="h4" align="center" gutterBottom>
+		<Box sx={{ maxWidth: 1000, margin: "auto", padding: 2 }}>
+			<Typography variant="h5" align="center" sx={{ marginBottom: 2 }}>
 				Formik Form Example
 			</Typography>
 
