@@ -1,9 +1,10 @@
 "use client";
 // pages/form.tsx
 
+import SendIcon from "@mui/icons-material/Send";
+import LoadingButton from "@mui/lab/LoadingButton";
 import {
 	Box,
-	Button,
 	Checkbox,
 	FormControlLabel,
 	FormGroup,
@@ -58,14 +59,7 @@ const MyForm: React.FC = () => {
 		return errors;
 	};
 
-	// Form submission
-	const handleSubmit = (
-		values: FormValues,
-		{ setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
-	) => {
-		console.log("Form submitted:", values);
-		setSubmitting(false);
-	};
+	const waitForIt = () => new Promise((r) => setTimeout(r, 2000));
 
 	return (
 		<Box sx={{ maxWidth: 1000, margin: "auto", padding: 2 }}>
@@ -76,7 +70,11 @@ const MyForm: React.FC = () => {
 			<Formik
 				initialValues={initialValues}
 				validate={validate}
-				onSubmit={handleSubmit}
+				// onSubmit={handleSubmit}
+				onSubmit={async (values) => {
+					await waitForIt();
+					alert(JSON.stringify(values, null, 2));
+				}}
 			>
 				{({ isSubmitting, handleChange, values, errors, touched }) => (
 					<Form>
@@ -149,16 +147,18 @@ const MyForm: React.FC = () => {
 						</FormGroup>
 
 						{/* Submit Button */}
-						<Button
+						<LoadingButton
 							type="submit"
 							variant="contained"
 							color="primary"
 							fullWidth
 							disabled={isSubmitting}
 							sx={{ fontSize: "1.2rem" }}
+							endIcon={<SendIcon />}
+							loading={isSubmitting ? true : false}
 						>
 							{isSubmitting ? "Submitting..." : "Submit"}
-						</Button>
+						</LoadingButton>
 					</Form>
 				)}
 			</Formik>
